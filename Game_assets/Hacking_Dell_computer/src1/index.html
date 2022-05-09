@@ -1,0 +1,12 @@
+<dashboard class="dashboard">
+    <dashboard-header title="CyberQuest Data Networks">
+        <dashboard-clock digital="true" binary="true" />
+    </dashboard-header>
+    <server-list>
+        <server v-for="(server, index) in servers" :class="{ 'has-failed': !server.status }" :type="server.type" @click.native="updateServerStatus(index)">
+            <span slot="name" class="data">{{server.name}}</span>
+            <span slot="status" class="data signal">{{server.status ? 'ONLINE' : 'OFFLINE'}}</span>
+            <span slot="adr" class="data">{{server.adr}}</span>
+        </server>
+    </server-list>
+</dashboard>
