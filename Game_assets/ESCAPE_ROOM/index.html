@@ -1,0 +1,73 @@
+<div id="app" class="app">
+  <section class="quiz" id="quiz">
+    <div v-if="!isIdle" class="progress">{{currentIndex+1}} / {{total}}
+    </div>
+    <br>
+    <br>
+    <br>    
+    <br>
+    <img src="https://github.com/lucylow/CyberQuest/blob/main/Game_assets/CyberQuest_logo/Screen%20Shot%202022-05-03%20at%2012.37.58%20PM.png?raw=true" width="300" alt=""/>
+    <h1> Programming Logic Quest</h1>
+    <transition name="fade" mode="out-in">  
+      <div v-if="isIdle" key="s1">
+        <p>Your task is to decide whether a given selector targets <strong>all and only</strong> the elements marked on the right.</p>
+        <button type="button" @click="start">Start Game</button>
+      </div>
+      <question v-else :key="currentIndex" :v="v" :q="proposal" @answered="go" :disabled="disabled" :correct="answer"></question>
+    </transition>
+    <transition name="fade">
+      <button v-show="shouldShowNext" type="button" @click="displayNext">Next</button>
+    </transition>
+    <transition name="fade">
+      <button v-show="allDone" type="button" @click="showResults">Results</button>
+    </transition>
+  </section>
+  <v-style v-if="!isIdle">.page-doc {{selector}} {
+    border: 3px solid ;}  
+  </v-style>
+  <v-style v-if="!isIdle && disabled">.page-doc {{proposal}} {
+    box-shadow: inset 0 0 0 3px #ff7058;}
+  </v-style>
+  <pagedoc></pagedoc>
+  <transition name="fade2">
+    <section class="score" v-if="askedForResults">
+      <h1>Your Result is</h1>
+      <finalresults :finalpercentage="finalPercentage"></finalresults>
+      <button type="button" @click="playAgain">Play Again</button>
+      <p>Play <a href="https://codepen.io/pehaa/pen/OYLwGW" target="_blank" rel="noopener">Specifity Count</a> or <a href="https://codepen.io/pehaa/pen/dEpvXN" target="_blank" rel="noopener">Specifity Wars</a></p>
+    </section>
+  </transition>
+</div>
+
+<script type="text/x-template" id="finalresults">
+  <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 40" width="300px">
+    <title>Results Board</title>
+    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2px" class="cls-1" d="M15.93,13H2V38.5H49V13H35.07" transform="translate(-0.5 0)"/><path fill="#fff" class="cls-2" d="M21,6.65a.15.15,0,0,0-.12-.11l-2.21-.3-1-2.16a.16.16,0,0,0-.28,0l-1,2.16-2.21.3a.16.16,0,0,0-.12.11.15.15,0,0,0,0,.16L15.66,8.5l-.44,2.31a.17.17,0,0,0,.06.16.15.15,0,0,0,.16,0L17.5,9.9,19.56,11l.07,0a.14.14,0,0,0,.09,0,.17.17,0,0,0,.06-.16L19.34,8.5,21,6.81A.15.15,0,0,0,21,6.65Zm16,0a.15.15,0,0,0-.12-.11l-2.21-.3-1-2.16a.16.16,0,0,0-.28,0l-1,2.16-2.21.3a.16.16,0,0,0-.12.11.15.15,0,0,0,0,.16L31.66,8.5l-.44,2.31a.17.17,0,0,0,.06.16.15.15,0,0,0,.16,0L33.5,9.9,35.56,11l.07,0a.14.14,0,0,0,.09,0,.17.17,0,0,0,.06-.16L35.34,8.5,37,6.81A.15.15,0,0,0,37,6.65ZM30,3.41a.19.19,0,0,0-.16-.14L27,2.88,25.68.1a.21.21,0,0,0-.36,0L24,2.88l-2.83.39a.19.19,0,0,0-.16.14.21.21,0,0,0,0,.21l2.08,2.17-.57,3a.21.21,0,0,0,.07.21.2.2,0,0,0,.21,0L25.5,7.59,28.15,9l.09,0a.19.19,0,0,0,.12,0,.21.21,0,0,0,.07-.21l-.56-3,2.07-2.17A.21.21,0,0,0,30,3.41Z" transform="translate(-0.5 0)"/>
+    <text style="font-size:12px" x="12.5" y="30" fill="#fff" textLength="25" lengthAdjust="spacing" small>{{finalpercentage}}</text>  </svg>
+</script>
+    
+<script type="text/x-template" id="page-doc">
+<div class="page-doc">
+    <header data-content1="<header>" data-content2="</header>">
+      <h1 data-content1="<h1>" data-content2="</h1>">&hellip;</h1>
+      <p class="intro" data-content1='<p class="intro">' data-content2="</p>">&hellip;</p>
+    </header>
+    <main data-content1="<main>" data-content2="</main>">
+      <section id="section1" data-content1='<section id="section1">' data-content2="</section>">
+        <h2 data-content1="<h2>" data-content2="</h2>">&hellip;</h2>
+        <p data-content1="<p>" data-content2="</p>">&hellip;</p>
+        <p data-content1="<p>" data-content2="</p>">&hellip;</p>
+      </section>
+      <p class='out' data-content1='<p class="out">' data-content2="</p>">&hellip;</p>
+    </main>
+    <footer data-content1='<footer>' data-content2="</footer>">
+      <div class="widget widget1" data-content1='<div class="widget widget1">' data-content2="</div>"><p data-content1="<p>" data-content2="</p>">&hellip;</p></div>
+      <div class="widget widget2" data-content1='<div class="widget widget2">' data-content2="</div>">
+        <div data-content1="<div>" data-content2="</div>"></div>
+      </div>
+      <div class="widget widget3" data-content1='<div class="widget widget3">' data-content2="</div>">
+        <div class="out" data-content1='<div class="out">' data-content2="</div>">&hellip;</div>
+      </div>
+    </footer>
+  </div>
+</script>
